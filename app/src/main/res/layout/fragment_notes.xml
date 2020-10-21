@@ -18,7 +18,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@string/hello_blank_fragment" />
+            android:text="@{notesViewModel.notesString}" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_add_note"
@@ -28,6 +28,7 @@
             android:layout_margin="16dp"
             android:contentDescription="@string/fab_add_note_description"
             android:src="@drawable/ic_fab_add_note"
+            android:onClick="@{() -> notesViewModel.onAddingNote()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent" />
 
