@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Livret</string>
     <string name="hello_blank_fragment">There should be notes RecyclerView</string>
+    <string name="fab_add_note_description">Add note</string>
 </resources>
