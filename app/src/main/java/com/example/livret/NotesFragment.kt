@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.findNavController
 import com.example.livret.databinding.FragmentNotesBinding
 
 /**
@@ -20,6 +21,9 @@ class NotesFragment : Fragment() {
         // Inflate the layout for this fragment
         val binding = DataBindingUtil.inflate<FragmentNotesBinding>(inflater,
                 R.layout.fragment_notes, container, false)
+        binding.fabAddNote.setOnClickListener{ view: View ->
+            view.findNavController().navigate(R.id.action_notesFragment_to_noteDetailsFragment)
+        }
         return binding.root
     }
 }
