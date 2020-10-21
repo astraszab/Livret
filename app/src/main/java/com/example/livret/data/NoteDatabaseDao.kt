@@ -23,4 +23,7 @@ interface NoteDatabaseDao {
 
     @Query("SELECT * FROM note_table ORDER BY noteId DESC")
     fun getAllNotes(): LiveData<List<Note>>
+
+    @Query("SELECT * FROM note_table ORDER BY noteId DESC LIMIT 1")
+    fun getLastAdded(): Note?
 }
