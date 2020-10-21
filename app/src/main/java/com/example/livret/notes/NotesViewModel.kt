@@ -26,4 +26,14 @@ class NotesViewModel(
     private suspend fun insert(note: Note) {
         database.insert(note)
     }
+
+    fun onClear() {
+        viewModelScope.launch {
+            clear()
+        }
+    }
+
+    suspend fun clear() {
+        database.clear()
+    }
 }

@@ -5,6 +5,7 @@
     tools:context="com.example.livret.notes.NotesFragment">
 
     <data>
+
         <variable
             name="notesViewModel"
             type="com.example.livret.notes.NotesViewModel" />
@@ -16,9 +17,22 @@
 
         <!-- TODO: Update blank fragment layout -->
         <TextView
+            android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="@{notesViewModel.notesString}" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_clear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:contentDescription="@string/fab_clear"
+            android:onClick="@{() -> notesViewModel.onClear()}"
+            android:src="@drawable/ic_fab_clear"
+            app:layout_constraintBottom_toTopOf="@+id/fab_add_note"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_add_note"
@@ -27,8 +41,8 @@
             android:layout_gravity="end|bottom"
             android:layout_margin="16dp"
             android:contentDescription="@string/fab_add_note_description"
-            android:src="@drawable/ic_fab_add_note"
             android:onClick="@{() -> notesViewModel.onAddingNote()}"
+            android:src="@drawable/ic_fab_add_note"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent" />
 
