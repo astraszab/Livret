@@ -11,12 +11,13 @@ import androidx.navigation.findNavController
 import com.example.livret.R
 import com.example.livret.data.NoteDatabase
 import com.example.livret.databinding.FragmentNotesBinding
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 /**
  * A simple [Fragment] subclass.
  */
 class NotesFragment : Fragment() {
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -35,9 +36,16 @@ class NotesFragment : Fragment() {
         binding.setLifecycleOwner(this)
         binding.notesViewModel = notesViewModel
 
-//        binding.fabAddNote.setOnClickListener{ view: View ->
-//            view.findNavController().navigate(R.id.action_notesFragment_to_noteDetailsFragment)
-//        }
+        binding.fabAddNote.setOnClickListener { view: View -> onAddingNote(view, binding) }
+
         return binding.root
+    }
+
+    fun onAddingNote(view: View, binding: FragmentNotesBinding) {
+        GlobalScope.launch {
+            val noteId = binding.notesViewModel!!.onAddingNote()
+            val action = NotesFragmentDirections.actionNotesFragmentToNoteDetailsFragment(noteId)
+            view.findNavController().navigate(action)
+        }
     }
 }

@@ -16,7 +16,11 @@
     </fragment>
     <fragment
         android:id="@+id/noteDetailsFragment"
-        android:name="com.example.livret.NoteDetailsFragment"
+        android:name="com.example.livret.notedetails.NoteDetailsFragment"
         android:label="fragment_note_details"
-        tools:layout="@layout/fragment_note_details" />
+        tools:layout="@layout/fragment_note_details" >
+        <argument
+            android:name="noteId"
+            app:argType="long" />
+    </fragment>
 </navigation>

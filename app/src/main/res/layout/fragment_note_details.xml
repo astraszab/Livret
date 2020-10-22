@@ -2,14 +2,21 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.livret.NoteDetailsFragment">
+    tools:context="com.example.livret.notedetails.NoteDetailsFragment">
+
+    <data>
+
+        <variable
+            name="noteDetailsViewModel"
+            type="com.example.livret.notedetails.NoteDetailsViewModel" />
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <EditText
-            android:id="@+id/editTextTextPersonName"
+            android:id="@+id/editNoteTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
@@ -17,13 +24,15 @@
             android:layout_marginEnd="5dp"
             android:ems="10"
             android:inputType="textPersonName"
-            android:text="Name"
+            android:text="@{noteDetailsViewModel.noteTitle}"
+            android:hint = "@string/title_hint"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:autofillHints="" />
 
         <EditText
-            android:id="@+id/editTextTextMultiLine"
+            android:id="@+id/editNoteTextContent"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="5dp"
@@ -33,9 +42,12 @@
             android:ems="10"
             android:gravity="start|top"
             android:inputType="textMultiLine"
+            android:hint="@string/content_hint"
+            android:text="@{noteDetailsViewModel.noteContent}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName" />
+            app:layout_constraintTop_toBottomOf="@+id/editNoteTitle"
+            android:importantForAutofill="no" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

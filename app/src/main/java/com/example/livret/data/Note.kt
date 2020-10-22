@@ -10,8 +10,8 @@ data class Note (
     var noteId: Long = 0L,
 
     @ColumnInfo(name = "title")
-    var title: String = "Title",
+    var title: String = "",
 
     @ColumnInfo(name = "content")
-    var content: String = "Content"
+    var content: String = ""
 )

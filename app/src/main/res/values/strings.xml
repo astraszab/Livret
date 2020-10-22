@@ -3,4 +3,6 @@
     <string name="hello_blank_fragment">There should be notes RecyclerView</string>
     <string name="fab_add_note_description">Add note</string>
     <string name="fab_clear">Remove all notes</string>
+    <string name="title_hint">Title</string>
+    <string name="content_hint">Content</string>
 </resources>
