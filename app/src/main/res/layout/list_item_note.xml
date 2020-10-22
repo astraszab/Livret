@@ -8,13 +8,18 @@
         <variable
             name="note"
             type="com.example.livret.data.Note" />
+        
+        <variable
+            name="clickListener"
+            type="com.example.livret.notes.NoteListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:foreground="?android:selectableItemBackground"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:onClick="@{() -> clickListener.onClick(note)}">
 
         <TextView
             android:id="@+id/note_title"

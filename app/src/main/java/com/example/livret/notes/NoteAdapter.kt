@@ -3,17 +3,15 @@ package com.example.livret.notes
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.livret.R
 import com.example.livret.data.Note
 import com.example.livret.databinding.ListItemNoteBinding
 
-class NoteAdapter : ListAdapter<Note, NoteAdapter.ViewHolder>(NoteDiffCallback()) {
+class NoteAdapter(val clickListener: NoteListener) :
+    ListAdapter<Note, NoteAdapter.ViewHolder>(NoteDiffCallback()) {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = getItem(position)
-        holder.bind(item)
+        holder.bind(getItem(position), clickListener)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -23,8 +21,9 @@ class NoteAdapter : ListAdapter<Note, NoteAdapter.ViewHolder>(NoteDiffCallback()
     class ViewHolder private constructor(val binding: ListItemNoteBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: Note) {
+        fun bind(item: Note, clickListener: NoteListener) {
             binding.note = item
+            binding.clickListener = clickListener
             binding.executePendingBindings()
         }
 
@@ -49,4 +48,8 @@ class NoteDiffCallback : DiffUtil.ItemCallback<Note>() {
         return oldItem == newItem
     }
 
+}
+
+class NoteListener(val clickListener: (nightId: Long) -> Unit) {
+    fun onClick(note: Note) = clickListener(note.noteId)
 }
