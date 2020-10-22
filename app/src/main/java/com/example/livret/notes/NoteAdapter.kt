@@ -1,24 +1,18 @@
 package com.example.livret.notes
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.ListAdapter
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.livret.R
 import com.example.livret.data.Note
+import com.example.livret.databinding.ListItemNoteBinding
 
-class NoteAdapter: RecyclerView.Adapter<NoteAdapter.ViewHolder>() {
-    var data = listOf<Note>()
-    set(value) {
-        field = value
-        notifyDataSetChanged()
-    }
-
-    override fun getItemCount() = data.size
-
+class NoteAdapter : ListAdapter<Note, NoteAdapter.ViewHolder>(NoteDiffCallback()) {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = data[position]
+        val item = getItem(position)
         holder.bind(item)
     }
 
@@ -26,23 +20,33 @@ class NoteAdapter: RecyclerView.Adapter<NoteAdapter.ViewHolder>() {
         return ViewHolder.from(parent)
     }
 
-    class ViewHolder private constructor(itemView: View) : RecyclerView.ViewHolder(itemView){
-        val noteTitle : TextView = itemView.findViewById(R.id.note_title)
-        val noteContent : TextView = itemView.findViewById(R.id.note_content)
+    class ViewHolder private constructor(val binding: ListItemNoteBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Note) {
-            noteTitle.text = item.title
-            noteContent.text = item.content
+            binding.note = item
+            binding.executePendingBindings()
         }
 
         companion object {
             fun from(parent: ViewGroup): ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val view = layoutInflater
-                    .inflate(R.layout.list_item_note, parent, false)
-                return ViewHolder(view)
+                val binding =
+                    ListItemNoteBinding.inflate(layoutInflater, parent, false)
+                return ViewHolder(binding)
             }
         }
+    }
+
+}
+
+class NoteDiffCallback : DiffUtil.ItemCallback<Note>() {
+    override fun areItemsTheSame(oldItem: Note, newItem: Note): Boolean {
+        return oldItem.noteId == newItem.noteId
+    }
+
+    override fun areContentsTheSame(oldItem: Note, newItem: Note): Boolean {
+        return oldItem == newItem
     }
 
 }
