@@ -27,8 +27,10 @@ class NotesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val binding = DataBindingUtil.inflate<FragmentNotesBinding>(inflater,
-            R.layout.fragment_notes, container, false)
+        val binding = DataBindingUtil.inflate<FragmentNotesBinding>(
+            inflater,
+            R.layout.fragment_notes, container, false
+        )
 
         val application = requireNotNull(this.activity).application
         val dataSource = NoteDatabase.getInstance(application).noteDatabaseDao
@@ -41,6 +43,9 @@ class NotesFragment : Fragment() {
         binding.notesViewModel = notesViewModel
 
         binding.fabAddNote.setOnClickListener { view: View -> onAddingNote(view, binding) }
+        binding.fabScrollUp.setOnClickListener { _ ->
+            binding.notesList.smoothScrollToPosition(0)
+        }
 
         val adapter = NoteAdapter(NoteListener { noteId ->
             onClickingNote(noteId)
@@ -53,8 +58,11 @@ class NotesFragment : Fragment() {
             }
         })
 
-        binding.notesList.addItemDecoration(DividerItemDecoration(
-            binding.notesList.context, 1))
+        binding.notesList.addItemDecoration(
+            DividerItemDecoration(
+                binding.notesList.context, 1
+            )
+        )
 
         return binding.root
     }

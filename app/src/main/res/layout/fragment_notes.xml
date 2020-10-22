@@ -26,6 +26,17 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_scroll_up"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:contentDescription="@string/fab_scroll_up_description"
+            android:src="@drawable/ic_scroll_up"
+            app:layout_constraintBottom_toTopOf="@+id/fab_clear"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_clear"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
