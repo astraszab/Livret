@@ -5,4 +5,5 @@
     <string name="fab_clear">Remove all notes</string>
     <string name="title_hint">Title</string>
     <string name="content_hint">Content</string>
+    <string name="delete_button_text">Delete</string>
 </resources>

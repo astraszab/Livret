@@ -21,6 +21,7 @@ import com.example.livret.notes.NotesViewModel
 class NoteDetailsFragment : Fragment() {
     val args: NoteDetailsFragmentArgs by navArgs()
     var binding : FragmentNoteDetailsBinding? = null
+    var noteDeleted = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,14 +42,24 @@ class NoteDetailsFragment : Fragment() {
         binding?.setLifecycleOwner(this)
         binding?.noteDetailsViewModel = noteDetailsViewModel
 
+        binding?.buttonDelete?.setOnClickListener { _ -> onDeleteNote() }
+
         return binding!!.root
     }
 
     override fun onStop() {
         super.onStop()
-        val note = Note()
-        note.title = binding!!.editNoteTitle.text.toString()
-        note.content = binding!!.editNoteTextContent.text.toString()
-        binding!!.noteDetailsViewModel!!.onUpdateNote(note)
+        if (!noteDeleted) {
+            val note = Note()
+            note.title = binding!!.editNoteTitle.text.toString()
+            note.content = binding!!.editNoteTextContent.text.toString()
+            binding!!.noteDetailsViewModel!!.onUpdateNote(note)
+        }
+    }
+
+    fun onDeleteNote() {
+        binding!!.noteDetailsViewModel!!.onDeleteNote()
+        noteDeleted = true
+        getActivity()?.onBackPressed()
     }
 }

@@ -20,11 +20,21 @@ class NoteDetailsViewModel(
     fun onUpdateNote(note: Note) {
         viewModelScope.launch {
             note.noteId = noteId
-            database.update(note)
+            update(note)
         }
     }
 
     suspend fun update(note: Note) {
         database.update(note)
+    }
+
+    fun onDeleteNote() {
+        viewModelScope.launch {
+            delete()
+        }
+    }
+
+    suspend fun delete() {
+        database.delete(note.value!!)
     }
 }

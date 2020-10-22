@@ -1,10 +1,7 @@
 package com.example.livret.data
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
 
 @Dao
 interface NoteDatabaseDao {
@@ -14,6 +11,9 @@ interface NoteDatabaseDao {
 
     @Update
     suspend fun update(note: Note)
+
+    @Delete
+    suspend fun delete(note: Note)
 
     @Query("SELECT * from note_table WHERE noteId = :key")
     suspend fun get(key: Long): Note?
