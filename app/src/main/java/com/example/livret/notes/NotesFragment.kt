@@ -1,22 +1,22 @@
 package com.example.livret.notes
 
-import android.icu.lang.UCharacter
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
+import com.example.livret.MainActivity
 import com.example.livret.R
 import com.example.livret.data.NoteDatabase
 import com.example.livret.databinding.FragmentNotesBinding
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+
 
 /**
  * A simple [Fragment] subclass.
@@ -41,6 +41,9 @@ class NotesFragment : Fragment() {
 
         binding.setLifecycleOwner(this)
         binding.notesViewModel = notesViewModel
+
+        val main = activity as MainActivity?
+        binding.logoutButton.setOnClickListener { _ -> main?.signOut() }
 
         binding.fabAddNote.setOnClickListener { view: View -> onAddingNote(view, binding) }
         binding.fabScrollUp.setOnClickListener { _ ->
