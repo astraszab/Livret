@@ -7,5 +7,5 @@
     <string name="content_hint">Content</string>
     <string name="delete_button_text">Delete</string>
     <string name="fab_scroll_up_description">Scroll up</string>
-    <string name="log_out_text">Log Out</string>
+    <string name="sign_out_text">Sign Out</string>
 </resources>

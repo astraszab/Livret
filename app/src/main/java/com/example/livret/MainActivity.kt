@@ -4,13 +4,13 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.databinding.DataBindingUtil
 import com.example.livret.databinding.ActivityMainBinding
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -22,6 +22,7 @@ class MainActivity : AppCompatActivity() {
 
     public override fun onStart() {
         super.onStart()
+
         // Check if user is signed in (non-null) and update UI accordingly.
         // val currentUser = auth.currentUser
         val user = FirebaseAuth.getInstance().currentUser
@@ -30,6 +31,19 @@ class MainActivity : AppCompatActivity() {
         } else {
             getSupportActionBar()?.setTitle("Livret: ${user?.displayName}")
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        super.onCreateOptionsMenu(menu)
+        menuInflater.inflate(R.menu.my_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.sign_out_item) {
+            signOut()
+        }
+        return true
     }
 
     fun createSignInIntent() {

@@ -42,9 +42,6 @@ class NotesFragment : Fragment() {
         binding.setLifecycleOwner(this)
         binding.notesViewModel = notesViewModel
 
-        val main = activity as MainActivity?
-        binding.logoutButton.setOnClickListener { _ -> main?.signOut() }
-
         binding.fabAddNote.setOnClickListener { view: View -> onAddingNote(view, binding) }
         binding.fabScrollUp.setOnClickListener { _ ->
             binding.notesList.smoothScrollToPosition(0)
