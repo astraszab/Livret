@@ -6,6 +6,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.example.livret.data.Note
+import com.google.firebase.firestore.Source
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -20,7 +21,7 @@ class NoteDetailsViewModel(
     val noteContent = Transformations.map(note) { note -> note.content }
 
     init {
-        document.get()
+        document.get(Source.CACHE)
             .addOnSuccessListener { document ->
                 if (document != null) {
                     Log.d("NoteDetailsViewModel", "DocumentSnapshot data: ${document.data}")

@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.example.livret.data.Note
+import com.google.firebase.firestore.MetadataChanges
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -14,7 +15,7 @@ class NotesViewModel(application: Application) : AndroidViewModel(application) {
 
     init {
         updateNotesList()
-        collection.addSnapshotListener { _, _ ->
+        collection.addSnapshotListener(MetadataChanges.INCLUDE) { _, _ ->
             updateNotesList() }
     }
 
