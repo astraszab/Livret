@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.livret.R
 import com.example.livret.data.Note
 import com.example.livret.databinding.FragmentNotesBinding
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -63,8 +64,9 @@ class NotesFragment : Fragment() {
     }
 
     private fun onAddingNote(view: View) {
+        val user = FirebaseAuth.getInstance().currentUser
         val document = Firebase.firestore.collection("notes").document()
-        val note = Note(document.id, "default title", "default content")
+        val note = Note(document.id, user?.uid,"default title", "default content")
 
         document.set(note)
             .addOnSuccessListener {

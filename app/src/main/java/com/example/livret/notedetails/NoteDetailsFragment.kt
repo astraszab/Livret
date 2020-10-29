@@ -11,6 +11,7 @@ import androidx.navigation.fragment.navArgs
 import com.example.livret.R
 import com.example.livret.data.Note
 import com.example.livret.databinding.FragmentNoteDetailsBinding
+import com.google.firebase.auth.FirebaseAuth
 
 /**
  * A simple [Fragment] subclass.
@@ -44,11 +45,14 @@ class NoteDetailsFragment : Fragment() {
 
     override fun onStop() {
         super.onStop()
+        val user = FirebaseAuth.getInstance().currentUser
         if (!noteDeleted) {
-            val note = Note()
-            note.noteId = args.noteId
-            note.title = binding.editNoteTitle.text.toString()
-            note.content = binding.editNoteTextContent.text.toString()
+            val note = Note(
+                args.noteId,
+                user?.uid,
+                binding.editNoteTitle.text.toString(),
+                binding.editNoteTextContent.text.toString()
+            )
             binding.noteDetailsViewModel?.onUpdateNote(note)
         }
     }
