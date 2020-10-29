@@ -20,7 +20,7 @@ class NotesViewModel(application: Application) : AndroidViewModel(application) {
             updateNotesList() }
     }
 
-    private fun updateNotesList() {
+    fun updateNotesList() {
         val user = FirebaseAuth.getInstance().currentUser
         Log.w("updateNotesList", "${user?.displayName}")
         collection.whereEqualTo("ownerUID", user?.uid).get()
