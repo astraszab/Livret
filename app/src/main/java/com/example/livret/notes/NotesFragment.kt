@@ -1,6 +1,7 @@
 package com.example.livret.notes
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,8 @@ import com.example.livret.MainActivity
 import com.example.livret.R
 import com.example.livret.data.NoteDatabase
 import com.example.livret.databinding.FragmentNotesBinding
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -68,15 +71,33 @@ class NotesFragment : Fragment() {
     }
 
     fun onAddingNote(view: View, binding: FragmentNotesBinding) {
-        GlobalScope.launch {
-            val noteId = binding.notesViewModel!!.onAddingNote()
-            val action = NotesFragmentDirections.actionNotesFragmentToNoteDetailsFragment(noteId)
-            view.findNavController().navigate(action)
-        }
+        val db = Firebase.firestore
+        val note = hashMapOf(
+            "title" to "Default title",
+            "content" to "Default content"
+        )
+
+        db.collection("notes")
+            .add(note)
+            .addOnSuccessListener { documentReference ->
+                Log.d("NotesFragment", "DocumentSnapshot added with ID: ${documentReference.id}")
+                val noteId = documentReference.id
+                val action = NotesFragmentDirections.actionNotesFragmentToNoteDetailsFragment(noteId)
+                view.findNavController().navigate(action)
+            }
+            .addOnFailureListener { e ->
+                Log.w("NotesFragment", "Error adding document", e)
+            }
+
+//        GlobalScope.launch {
+//            val noteId = binding.notesViewModel!!.onAddingNote()
+//            val action = NotesFragmentDirections.actionNotesFragmentToNoteDetailsFragment(noteId)
+//            view.findNavController().navigate(action)
+//        }
     }
 
     fun onClickingNote(noteId: Long) {
-        val action = NotesFragmentDirections.actionNotesFragmentToNoteDetailsFragment(noteId)
-        getView()?.findNavController()?.navigate(action)
+        //val action = NotesFragmentDirections.actionNotesFragmentToNoteDetailsFragment(noteId)
+        //getView()?.findNavController()?.navigate(action)
     }
 }

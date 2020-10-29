@@ -21,6 +21,6 @@
         tools:layout="@layout/fragment_note_details" >
         <argument
             android:name="noteId"
-            app:argType="long" />
+            app:argType="string" />
     </fragment>
 </navigation>
