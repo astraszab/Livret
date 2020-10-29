@@ -8,7 +8,7 @@
         <variable
             name="note"
             type="com.example.livret.data.Note" />
-        
+
         <variable
             name="clickListener"
             type="com.example.livret.notes.NoteListener" />
@@ -18,8 +18,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:foreground="?android:selectableItemBackground"
-        android:padding="16dp"
-        android:onClick="@{() -> clickListener.onClick(note)}">
+        android:onClick="@{() -> clickListener.onClick(note)}"
+        android:padding="16dp">
 
         <TextView
             android:id="@+id/note_title"

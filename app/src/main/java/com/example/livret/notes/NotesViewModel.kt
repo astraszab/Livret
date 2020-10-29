@@ -2,42 +2,33 @@ package com.example.livret.notes
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.MutableLiveData
 import com.example.livret.data.Note
-import com.example.livret.data.NoteDatabaseDao
-import kotlinx.coroutines.launch
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
-class NotesViewModel(
-    val database: NoteDatabaseDao,
-    application: Application) : AndroidViewModel(application) {
+class NotesViewModel(application: Application) : AndroidViewModel(application) {
 
-    val notes = database.getAllNotes()
+    private val collection = Firebase.firestore.collection("notes")
+    val notes = MutableLiveData<List<Note>>()
 
-    suspend fun onAddingNote(): Long {
-        var newNote : Note? = null
-        val job = viewModelScope.launch {
-            insert(Note())
-            newNote = getLastAdded()
-        }
-        job.join()
-        return newNote!!.noteId
+    init {
+        updateNotesList()
+        collection.addSnapshotListener { _, _ ->
+            updateNotesList() }
     }
 
-    private suspend fun insert(note: Note) {
-        database.insert(note)
-    }
-
-    private suspend fun getLastAdded(): Note? {
-        return database.getLastAdded()
+    private fun updateNotesList() {
+        collection.get()
+            .addOnSuccessListener { result ->
+                notes.value = result.toObjects(Note::class.java)
+            }
     }
 
     fun onClear() {
-        viewModelScope.launch {
-            clear()
+        val noteList = notes.value
+        noteList?.forEach {
+            collection.document(it.noteId!!).delete()
         }
-    }
-
-    suspend fun clear() {
-        database.clear()
     }
 }

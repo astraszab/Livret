@@ -47,9 +47,8 @@ class NoteDiffCallback : DiffUtil.ItemCallback<Note>() {
     override fun areContentsTheSame(oldItem: Note, newItem: Note): Boolean {
         return oldItem == newItem
     }
-
 }
 
-class NoteListener(val clickListener: (nightId: Long) -> Unit) {
+class NoteListener(val clickListener: (noteId: String?) -> Unit) {
     fun onClick(note: Note) = clickListener(note.noteId)
 }

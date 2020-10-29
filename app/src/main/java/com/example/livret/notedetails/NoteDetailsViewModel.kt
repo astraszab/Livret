@@ -5,7 +5,7 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
-import com.example.livret.data.NoteF
+import com.example.livret.data.Note
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -15,7 +15,7 @@ class NoteDetailsViewModel(
     application: Application
 ) : AndroidViewModel(application) {
     private val document = Firebase.firestore.collection("notes").document(noteId)
-    private val note = MutableLiveData<NoteF>()
+    private val note = MutableLiveData<Note>()
     val noteTitle = Transformations.map(note) { note -> note.title }
     val noteContent = Transformations.map(note) { note -> note.content }
 
@@ -24,7 +24,7 @@ class NoteDetailsViewModel(
             .addOnSuccessListener { document ->
                 if (document != null) {
                     Log.d("NoteDetailsViewModel", "DocumentSnapshot data: ${document.data}")
-                    note.value = document.toObject<NoteF>()
+                    note.value = document.toObject<Note>()
                 } else {
                     Log.d("NoteDetailsViewModel", "No such document")
                 }
@@ -34,7 +34,7 @@ class NoteDetailsViewModel(
             }
     }
 
-    fun onUpdateNote(note: NoteF) {
+    fun onUpdateNote(note: Note) {
         document.set(note)
     }
 

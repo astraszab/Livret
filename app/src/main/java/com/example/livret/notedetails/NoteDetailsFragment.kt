@@ -9,7 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import com.example.livret.R
-import com.example.livret.data.NoteF
+import com.example.livret.data.Note
 import com.example.livret.databinding.FragmentNoteDetailsBinding
 
 /**
@@ -24,7 +24,6 @@ class NoteDetailsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater,
             R.layout.fragment_note_details, container, false)
 
@@ -46,7 +45,8 @@ class NoteDetailsFragment : Fragment() {
     override fun onStop() {
         super.onStop()
         if (!noteDeleted) {
-            val note = NoteF()
+            val note = Note()
+            note.noteId = args.noteId
             note.title = binding.editNoteTitle.text.toString()
             note.content = binding.editNoteTextContent.text.toString()
             binding.noteDetailsViewModel?.onUpdateNote(note)
