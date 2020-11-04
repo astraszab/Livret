@@ -4,5 +4,6 @@ data class Note (
     var noteId: String? = null,
     var ownerUID: String? = null,
     var title: String = "",
-    var content: String = ""
+    var content: String = "",
+    var category: String = ""
 )

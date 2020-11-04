@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
@@ -40,6 +41,19 @@ class NoteDetailsFragment : Fragment() {
 
         binding.buttonDelete.setOnClickListener { _ -> onDeleteNote() }
 
+        ArrayAdapter.createFromResource(
+            requireContext(),
+            R.array.categories_array,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            binding.categorySpinner.adapter = adapter
+        }
+
+        noteDetailsViewModel.noteCategory.observe(viewLifecycleOwner, {
+            binding.categorySpinner.setSelection(noteDetailsViewModel.getNoteCategoryId());
+        })
+
         return binding.root
     }
 
@@ -51,7 +65,8 @@ class NoteDetailsFragment : Fragment() {
                 args.noteId,
                 user?.uid,
                 binding.editNoteTitle.text.toString(),
-                binding.editNoteTextContent.text.toString()
+                binding.editNoteTextContent.text.toString(),
+                binding.categorySpinner.getSelectedItem().toString()
             )
             binding.noteDetailsViewModel?.onUpdateNote(note)
         }

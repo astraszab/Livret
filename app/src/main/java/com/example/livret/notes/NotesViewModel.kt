@@ -14,7 +14,7 @@ import java.util.*
 class NotesViewModel(application: Application) : AndroidViewModel(application) {
     private val collection = Firebase.firestore.collection("notes")
     val notes = MutableLiveData<List<Note>>()
-    var notesBuffer : List<Note>? = null
+    private var notesBuffer : List<Note>? = null
     private var searchQuery : String = ""
 
     init {
@@ -42,6 +42,7 @@ class NotesViewModel(application: Application) : AndroidViewModel(application) {
         noteList?.forEach {
             collection.document(it.noteId!!).delete()
         }
+        updateNotesList()
     }
 
     fun setSearchQuery(value: String) {
