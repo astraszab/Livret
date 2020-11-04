@@ -13,3 +13,8 @@ fun TextView.setNoteTitle(item: Note) {
 fun TextView.setNoteContent(item: Note) {
     text = item.content
 }
+
+@BindingAdapter("noteCategory")
+fun TextView.setNoteCategory(item: Note) {
+    text = item.category
+}

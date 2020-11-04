@@ -42,6 +42,17 @@
             app:noteContent="@{note}"
             tools:text="Content" />
 
+        <TextView
+            android:id="@+id/note_category"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textColor="#808080"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/note_content"
+            app:noteCategory="@{note}"
+            tools:text="Category" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
