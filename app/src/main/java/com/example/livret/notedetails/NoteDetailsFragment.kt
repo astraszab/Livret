@@ -41,14 +41,11 @@ class NoteDetailsFragment : Fragment() {
 
         binding.buttonDelete.setOnClickListener { _ -> onDeleteNote() }
 
-        ArrayAdapter.createFromResource(
-            requireContext(),
-            R.array.categories_array,
-            android.R.layout.simple_spinner_item
-        ).also { adapter ->
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            binding.categorySpinner.adapter = adapter
-        }
+        val categoryAdapter = ArrayAdapter(requireContext(),
+            android.R.layout.simple_spinner_item,
+            noteDetailsViewModel.categoriesAvailable)
+        categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.categorySpinner.adapter = categoryAdapter
 
         noteDetailsViewModel.noteCategory.observe(viewLifecycleOwner, {
             binding.categorySpinner.setSelection(noteDetailsViewModel.getNoteCategoryId());

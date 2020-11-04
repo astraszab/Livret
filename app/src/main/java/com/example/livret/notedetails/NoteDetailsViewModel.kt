@@ -20,8 +20,10 @@ class NoteDetailsViewModel(
     val noteCategory = MutableLiveData<String>("")
     val noteTitle = Transformations.map(note) { note -> note.title }
     val noteContent = Transformations.map(note) { note -> note.content }
+    var categoriesAvailable = listOf<String>()
 
     init {
+        loadCategories()
         document.get(Source.CACHE)
             .addOnSuccessListener { document ->
                 if (document != null) {
@@ -37,6 +39,10 @@ class NoteDetailsViewModel(
             }
     }
 
+    private fun loadCategories() {
+        categoriesAvailable = listOf("Home", "Work", "Other")
+    }
+
     fun onUpdateNote(note: Note) {
         document.set(note)
     }
@@ -46,12 +52,8 @@ class NoteDetailsViewModel(
     }
 
     fun getNoteCategoryId(): Int {
-        if (noteCategory.value == "Work") {
-            return 1
-        } else if (noteCategory.value == "Other") {
-            return 2
-        } else {
-            return 0
-        }
+        val categoryIndex = categoriesAvailable.indexOf(noteCategory.value)
+        if (categoryIndex == -1) return 0
+        return categoryIndex
     }
 }
