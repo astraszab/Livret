@@ -5,9 +5,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -65,6 +65,9 @@ class NotesFragment : Fragment() {
 
         val liveUID: MutableLiveData<String?> = (getActivity() as MainActivity).userId
         liveUID.observe(viewLifecycleOwner, Observer { notesViewModel.updateNotesList() })
+
+        binding.searchString.addTextChangedListener { text ->
+            notesViewModel.setSearchQuery(text.toString()) }
 
         return binding.root
     }
