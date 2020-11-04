@@ -21,8 +21,7 @@ class NoteDetailsViewModel(
     val noteCategory = MutableLiveData<String>("")
     val noteTitle = Transformations.map(note) { note -> note.title }
     val noteContent = Transformations.map(note) { note -> note.content }
-    var categoriesAvailable : MutableList<String> = arrayListOf("Home", "Work", "Other")
-    var categoriesLoaded: MutableLiveData<Boolean> = MutableLiveData(false)
+    var categoriesAvailable = MutableLiveData(listOf<String>())
     var noteLoaded = false
 
     init {
@@ -48,14 +47,12 @@ class NoteDetailsViewModel(
         Firebase.firestore.collection("notes")
             .whereEqualTo("ownerUID", user?.uid).get(Source.CACHE)
             .addOnSuccessListener { result ->
+                val resCategories = mutableSetOf("Home", "Work", "Other")
                 result.forEach {
-                    val category = it["category"].toString()
-                    if (!categoriesAvailable.contains(category)) {
-                        categoriesAvailable.add(it["category"].toString())
-                    }
+                    resCategories.add(it["category"].toString())
                 }
-                categoriesAvailable.add("Add custom...")
-                categoriesLoaded.value = true
+                resCategories.add("Add custom...")
+                categoriesAvailable.value = resCategories.toList()
             }
     }
 
@@ -68,7 +65,7 @@ class NoteDetailsViewModel(
     }
 
     fun getNoteCategoryId(): Int {
-        val categoryIndex = categoriesAvailable.indexOf(noteCategory.value)
+        val categoryIndex = categoriesAvailable.value!!.indexOf(noteCategory.value)
         if (categoryIndex == -1) return 0
         return categoryIndex
     }

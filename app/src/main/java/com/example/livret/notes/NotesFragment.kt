@@ -5,6 +5,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -66,8 +68,37 @@ class NotesFragment : Fragment() {
         val liveUID: MutableLiveData<String?> = (getActivity() as MainActivity).userId
         liveUID.observe(viewLifecycleOwner, Observer { notesViewModel.updateNotesList() })
 
+        notesViewModel.availableCategories.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                val categoryAdapter = ArrayAdapter(
+                    requireContext(),
+                    android.R.layout.simple_spinner_item,
+                    it
+                )
+                categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                binding.categoryFilter.adapter = categoryAdapter
+            }
+        })
+
         binding.searchString.addTextChangedListener { text ->
-            notesViewModel.setSearchQuery(text.toString()) }
+            notesViewModel.setSearchQuery(text.toString())
+        }
+
+        binding.categoryFilter.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    notesViewModel.setCategoryFilter(
+                        binding.categoryFilter.getSelectedItem().toString()
+                    )
+                }
+            }
 
         return binding.root
     }
@@ -75,7 +106,12 @@ class NotesFragment : Fragment() {
     private fun onAddingNote(view: View) {
         val user = FirebaseAuth.getInstance().currentUser
         val document = Firebase.firestore.collection("notes").document()
-        val note = Note(document.id, user?.uid, "default title", "default content")
+        val note = Note(
+            document.id, user?.uid,
+            "default title",
+            "default content",
+            "Home"
+        )
 
         document.set(note)
             .addOnSuccessListener {

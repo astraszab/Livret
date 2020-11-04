@@ -10,4 +10,5 @@
     <string name="sign_out_text">Sign Out</string>
     <string name="searchPrompt">Search</string>
     <string name="your_category_hint">Your category</string>
+    <string name="category_label">Category:</string>
 </resources>

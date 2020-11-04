@@ -45,24 +45,22 @@ class NoteDetailsFragment : Fragment() {
 
         binding.buttonDelete.setOnClickListener { _ -> onDeleteNote() }
 
-        noteDetailsViewModel.categoriesLoaded.observe(viewLifecycleOwner, { loaded ->
-            if (loaded) {
-                val categoryAdapter = ArrayAdapter(
-                    requireContext(),
-                    android.R.layout.simple_spinner_item,
-                    noteDetailsViewModel.categoriesAvailable
-                )
-                categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                binding.categorySpinner.adapter = categoryAdapter
+        noteDetailsViewModel.categoriesAvailable.observe(viewLifecycleOwner, { it ->
+            val categoryAdapter = ArrayAdapter(
+                requireContext(),
+                android.R.layout.simple_spinner_item,
+                it
+            )
+            categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            binding.categorySpinner.adapter = categoryAdapter
 
-                if (noteDetailsViewModel.noteLoaded) {
-                    binding.categorySpinner.setSelection(noteDetailsViewModel.getNoteCategoryId())
-                }
-
-                noteDetailsViewModel.noteCategory.observe(viewLifecycleOwner, {
-                    binding.categorySpinner.setSelection(noteDetailsViewModel.getNoteCategoryId())
-                })
+            if (noteDetailsViewModel.noteLoaded) {
+                binding.categorySpinner.setSelection(noteDetailsViewModel.getNoteCategoryId())
             }
+
+            noteDetailsViewModel.noteCategory.observe(viewLifecycleOwner, {
+                binding.categorySpinner.setSelection(noteDetailsViewModel.getNoteCategoryId())
+            })
         })
 
         setupAddNewCategoryListener()

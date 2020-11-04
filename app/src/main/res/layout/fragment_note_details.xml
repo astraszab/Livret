@@ -76,7 +76,7 @@
             android:ems="10"
             android:hint="@string/your_category_hint"
             android:inputType="textPersonName"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editNoteTitle" />

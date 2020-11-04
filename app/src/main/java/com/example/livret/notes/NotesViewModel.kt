@@ -14,13 +14,16 @@ import java.util.*
 class NotesViewModel(application: Application) : AndroidViewModel(application) {
     private val collection = Firebase.firestore.collection("notes")
     val notes = MutableLiveData<List<Note>>()
-    private var notesBuffer : List<Note>? = null
-    private var searchQuery : String = ""
+    private var notesBuffer: List<Note>? = null
+    val availableCategories = MutableLiveData<List<String>>()
+    private var searchQuery = ""
+    private var categoryFilter = "All"
 
     init {
         updateNotesList()
         collection.addSnapshotListener(MetadataChanges.INCLUDE) { _, _ ->
-            updateNotesList() }
+            updateNotesList()
+        }
     }
 
     fun updateNotesList() {
@@ -28,13 +31,34 @@ class NotesViewModel(application: Application) : AndroidViewModel(application) {
         Log.w("updateNotesList", "${user?.displayName}")
         collection.whereEqualTo("ownerUID", user?.uid).get()
             .addOnSuccessListener { result ->
-                if (searchQuery.isEmpty()) {
-                    notes.value = result.toObjects(Note::class.java)
-                } else {
-                    notesBuffer = result.toObjects(Note::class.java)
-                    onSearch()
-                }
+                notesBuffer = result.toObjects(Note::class.java)
+                updateAvailableCategories()
+                updateNotesListView()
             }
+    }
+
+    private fun updateNotesListView() {
+        var resNotes: List<Note>?
+        if (searchQuery.isEmpty()) {
+            resNotes = notesBuffer
+        } else {
+            resNotes = notesBuffer?.filter {
+                it.title.toLowerCase(Locale.getDefault())
+                    .contains(searchQuery.toLowerCase(Locale.getDefault()))
+            }
+        }
+        if (categoryFilter != "All") {
+            resNotes = resNotes?.filter {
+                it.category == categoryFilter
+            }
+        }
+        notes.value = resNotes
+    }
+
+    private fun updateAvailableCategories() {
+        val resCategories = mutableSetOf("All")
+        notesBuffer?.forEach { resCategories.add(it.category) }
+        availableCategories.value = resCategories.toList()
     }
 
     fun onClear() {
@@ -46,31 +70,12 @@ class NotesViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun setSearchQuery(value: String) {
-        if (searchQuery.isEmpty() and value.isNotEmpty()) {
-            onBeforeSearch()
-            searchQuery = value
-            onSearch()
-        } else if (searchQuery.isNotEmpty() and value.isNotEmpty()) {
-            searchQuery = value
-            onSearch()
-        } else if (searchQuery.isNotEmpty() and value.isEmpty()) {
-            searchQuery = value
-            onSearchFinished()
-        }
+        searchQuery = value
+        updateNotesListView()
     }
 
-    private fun onBeforeSearch() {
-        notesBuffer = notes.value
-    }
-
-    private fun onSearch() {
-        notes.value = notesBuffer?.filter {
-            it.title.toLowerCase(Locale.getDefault())
-                .contains(searchQuery.toLowerCase(Locale.getDefault()))
-        }
-    }
-
-    private fun onSearchFinished() {
-        notes.value = notesBuffer
+    fun setCategoryFilter(value: String) {
+        categoryFilter = value
+        updateNotesListView()
     }
 }
