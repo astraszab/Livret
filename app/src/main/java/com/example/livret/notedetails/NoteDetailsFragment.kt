@@ -5,7 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
@@ -18,7 +20,7 @@ import com.google.firebase.auth.FirebaseAuth
  * A simple [Fragment] subclass.
  */
 class NoteDetailsFragment : Fragment() {
-    lateinit var binding : FragmentNoteDetailsBinding
+    lateinit var binding: FragmentNoteDetailsBinding
     val args: NoteDetailsFragmentArgs by navArgs()
     var noteDeleted = false
 
@@ -26,8 +28,10 @@ class NoteDetailsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater,
-            R.layout.fragment_note_details, container, false)
+        binding = DataBindingUtil.inflate(
+            inflater,
+            R.layout.fragment_note_details, container, false
+        )
 
         val noteId = args.noteId
         val application = requireNotNull(this.activity).application
@@ -41,15 +45,27 @@ class NoteDetailsFragment : Fragment() {
 
         binding.buttonDelete.setOnClickListener { _ -> onDeleteNote() }
 
-        val categoryAdapter = ArrayAdapter(requireContext(),
-            android.R.layout.simple_spinner_item,
-            noteDetailsViewModel.categoriesAvailable)
-        categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        binding.categorySpinner.adapter = categoryAdapter
+        noteDetailsViewModel.categoriesLoaded.observe(viewLifecycleOwner, { loaded ->
+            if (loaded) {
+                val categoryAdapter = ArrayAdapter(
+                    requireContext(),
+                    android.R.layout.simple_spinner_item,
+                    noteDetailsViewModel.categoriesAvailable
+                )
+                categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                binding.categorySpinner.adapter = categoryAdapter
 
-        noteDetailsViewModel.noteCategory.observe(viewLifecycleOwner, {
-            binding.categorySpinner.setSelection(noteDetailsViewModel.getNoteCategoryId());
+                if (noteDetailsViewModel.noteLoaded) {
+                    binding.categorySpinner.setSelection(noteDetailsViewModel.getNoteCategoryId())
+                }
+
+                noteDetailsViewModel.noteCategory.observe(viewLifecycleOwner, {
+                    binding.categorySpinner.setSelection(noteDetailsViewModel.getNoteCategoryId())
+                })
+            }
         })
+
+        setupAddNewCategoryListener()
 
         return binding.root
     }
@@ -58,12 +74,18 @@ class NoteDetailsFragment : Fragment() {
         super.onStop()
         val user = FirebaseAuth.getInstance().currentUser
         if (!noteDeleted) {
+            var noteCategory = ""
+            if (binding.editTextAddCategory.isVisible) {
+                noteCategory = binding.editTextAddCategory.text.toString()
+            } else {
+                noteCategory = binding.categorySpinner.getSelectedItem().toString()
+            }
             val note = Note(
                 args.noteId,
                 user?.uid,
                 binding.editNoteTitle.text.toString(),
                 binding.editNoteTextContent.text.toString(),
-                binding.categorySpinner.getSelectedItem().toString()
+                noteCategory
             )
             binding.noteDetailsViewModel?.onUpdateNote(note)
         }
@@ -73,5 +95,25 @@ class NoteDetailsFragment : Fragment() {
         binding.noteDetailsViewModel?.onDeleteNote()
         noteDeleted = true
         getActivity()?.onBackPressed()
+    }
+
+    fun setupAddNewCategoryListener() {
+        binding.categorySpinner.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    if (binding.categorySpinner.getSelectedItem().toString() == "Add custom...") {
+                        binding.editTextAddCategory.visibility = View.VISIBLE
+                    } else {
+                        binding.editTextAddCategory.visibility = View.GONE
+                    }
+                }
+            }
     }
 }

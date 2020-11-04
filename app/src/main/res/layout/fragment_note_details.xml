@@ -45,7 +45,7 @@
             android:text="@{noteDetailsViewModel.noteContent}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editNoteTitle" />
+            app:layout_constraintTop_toBottomOf="@+id/editTextAddCategory" />
 
         <Button
             android:id="@+id/button_delete"
@@ -65,5 +65,20 @@
             android:layout_marginEnd="5dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/editTextAddCategory"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:ems="10"
+            android:hint="@string/your_category_hint"
+            android:inputType="textPersonName"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editNoteTitle" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -6,6 +6,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.example.livret.data.Note
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.Source
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -20,7 +21,9 @@ class NoteDetailsViewModel(
     val noteCategory = MutableLiveData<String>("")
     val noteTitle = Transformations.map(note) { note -> note.title }
     val noteContent = Transformations.map(note) { note -> note.content }
-    var categoriesAvailable = listOf<String>()
+    var categoriesAvailable : MutableList<String> = arrayListOf("Home", "Work", "Other")
+    var categoriesLoaded: MutableLiveData<Boolean> = MutableLiveData(false)
+    var noteLoaded = false
 
     init {
         loadCategories()
@@ -30,6 +33,7 @@ class NoteDetailsViewModel(
                     Log.d("NoteDetailsViewModel", "DocumentSnapshot data: ${document.data}")
                     note.value = document.toObject<Note>()
                     noteCategory.value = note.value?.category
+                    noteLoaded = true
                 } else {
                     Log.d("NoteDetailsViewModel", "No such document")
                 }
@@ -40,7 +44,19 @@ class NoteDetailsViewModel(
     }
 
     private fun loadCategories() {
-        categoriesAvailable = listOf("Home", "Work", "Other")
+        val user = FirebaseAuth.getInstance().currentUser
+        Firebase.firestore.collection("notes")
+            .whereEqualTo("ownerUID", user?.uid).get(Source.CACHE)
+            .addOnSuccessListener { result ->
+                result.forEach {
+                    val category = it["category"].toString()
+                    if (!categoriesAvailable.contains(category)) {
+                        categoriesAvailable.add(it["category"].toString())
+                    }
+                }
+                categoriesAvailable.add("Add custom...")
+                categoriesLoaded.value = true
+            }
     }
 
     fun onUpdateNote(note: Note) {

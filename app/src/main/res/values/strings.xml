@@ -9,4 +9,5 @@
     <string name="fab_scroll_up_description">Scroll up</string>
     <string name="sign_out_text">Sign Out</string>
     <string name="searchPrompt">Search</string>
+    <string name="your_category_hint">Your category</string>
 </resources>
