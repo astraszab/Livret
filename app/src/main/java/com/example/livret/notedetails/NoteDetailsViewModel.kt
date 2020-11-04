@@ -18,7 +18,7 @@ class NoteDetailsViewModel(
 ) : AndroidViewModel(application) {
     private val document = Firebase.firestore.collection("notes").document(noteId)
     private val note = MutableLiveData<Note>()
-    val noteCategory = MutableLiveData<String>("")
+    val noteCategory = MutableLiveData("")
     val noteTitle = Transformations.map(note) { note -> note.title }
     val noteContent = Transformations.map(note) { note -> note.content }
     var categoriesAvailable = MutableLiveData(listOf<String>())
@@ -68,5 +68,9 @@ class NoteDetailsViewModel(
         val categoryIndex = categoriesAvailable.value!!.indexOf(noteCategory.value)
         if (categoryIndex == -1) return 0
         return categoryIndex
+    }
+
+    fun getNote(): Note? {
+        return note.value
     }
 }

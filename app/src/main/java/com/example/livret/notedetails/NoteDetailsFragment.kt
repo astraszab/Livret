@@ -45,7 +45,7 @@ class NoteDetailsFragment : Fragment() {
 
         binding.buttonDelete.setOnClickListener { _ -> onDeleteNote() }
 
-        noteDetailsViewModel.categoriesAvailable.observe(viewLifecycleOwner, { it ->
+        noteDetailsViewModel.categoriesAvailable.observe(viewLifecycleOwner, {
             val categoryAdapter = ArrayAdapter(
                 requireContext(),
                 android.R.layout.simple_spinner_item,
@@ -70,32 +70,32 @@ class NoteDetailsFragment : Fragment() {
 
     override fun onStop() {
         super.onStop()
-        val user = FirebaseAuth.getInstance().currentUser
         if (!noteDeleted) {
-            var noteCategory = ""
+            updateNote()
+        }
+    }
+
+    private fun updateNote() {
+        val note = binding.noteDetailsViewModel?.getNote()
+        if (note != null) {
             if (binding.editTextAddCategory.isVisible) {
-                noteCategory = binding.editTextAddCategory.text.toString()
+                note.category = binding.editTextAddCategory.text.toString()
             } else {
-                noteCategory = binding.categorySpinner.getSelectedItem().toString()
+                note.category = binding.categorySpinner.getSelectedItem().toString()
             }
-            val note = Note(
-                args.noteId,
-                user?.uid,
-                binding.editNoteTitle.text.toString(),
-                binding.editNoteTextContent.text.toString(),
-                noteCategory
-            )
+            note.title = binding.editNoteTitle.text.toString()
+            note.content = binding.editNoteTextContent.text.toString()
             binding.noteDetailsViewModel?.onUpdateNote(note)
         }
     }
 
-    fun onDeleteNote() {
+    private fun onDeleteNote() {
         binding.noteDetailsViewModel?.onDeleteNote()
         noteDeleted = true
         getActivity()?.onBackPressed()
     }
 
-    fun setupAddNewCategoryListener() {
+    private fun setupAddNewCategoryListener() {
         binding.categorySpinner.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
