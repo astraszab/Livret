@@ -25,7 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            card_view:cardCornerRadius="10dp"
+            card_view:cardCornerRadius="8dp"
             card_view:cardElevation="0dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -39,7 +39,8 @@
                     android:id="@+id/note_title"
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
-                    android:textSize="30sp"
+                    android:textColor="#000000"
+                    android:textSize="28sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -47,25 +48,28 @@
                     tools:text="Title" />
 
                 <TextView
-                    android:id="@+id/note_content"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:textSize="24sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/note_title"
-                    app:noteContent="@{note}"
-                    tools:text="Content" />
-
-                <TextView
                     android:id="@+id/note_category"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="4dp"
                     android:textColor="#808080"
+                    android:textSize="16sp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/note_content"
+                    app:layout_constraintTop_toBottomOf="@+id/note_title"
                     app:noteCategory="@{note}"
                     tools:text="Category" />
+
+                <TextView
+                    android:id="@+id/note_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="16dp"
+                    android:textColor="#000000"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/note_category"
+                    app:noteContent="@{note}"
+                    tools:text="Content" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
