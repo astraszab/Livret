@@ -59,12 +59,6 @@ class NotesFragment : Fragment() {
             }
         })
 
-        binding.notesList.addItemDecoration(
-            DividerItemDecoration(
-                binding.notesList.context, 1
-            )
-        )
-
         val liveUID: MutableLiveData<String?> = (getActivity() as MainActivity).userId
         liveUID.observe(viewLifecycleOwner, Observer { notesViewModel.updateNotesList() })
 
