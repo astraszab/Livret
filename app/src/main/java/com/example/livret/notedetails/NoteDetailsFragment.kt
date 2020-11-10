@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
@@ -106,6 +107,11 @@ class NoteDetailsFragment : Fragment() {
                     position: Int,
                     id: Long
                 ) {
+                    (parent?.getChildAt(0) as TextView?)
+                        ?.setTextColor(
+                            getResources()
+                                .getColor(R.color.secondaryTextColor)
+                        )
                     if (binding.categorySpinner.getSelectedItem().toString() == "Add custom...") {
                         binding.editTextAddCategory.visibility = View.VISIBLE
                     } else {

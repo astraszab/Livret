@@ -13,7 +13,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/surfaceColor">
 
         <EditText
             android:id="@+id/editNoteTitle"
@@ -26,6 +27,8 @@
             android:hint="@string/title_hint"
             android:inputType="textPersonName"
             android:text="@{noteDetailsViewModel.noteTitle}"
+            android:textColor="@color/secondaryTextColor"
+            android:textColorHint="@color/shadedTextColor"
             app:layout_constraintEnd_toStartOf="@+id/categorySpinner"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -43,6 +46,8 @@
             android:importantForAutofill="no"
             android:inputType="textMultiLine"
             android:text="@{noteDetailsViewModel.noteContent}"
+            android:textColor="@color/secondaryTextColor"
+            android:textColorHint="@color/shadedTextColor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editTextAddCategory" />
@@ -52,7 +57,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
+            android:backgroundTint="@color/secondaryColor"
             android:text="@string/delete_button_text"
+            android:textColor="@color/secondaryTextColor"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -76,6 +83,8 @@
             android:ems="10"
             android:hint="@string/your_category_hint"
             android:inputType="textPersonName"
+            android:textColor="@color/secondaryTextColor"
+            android:textColorHint="@color/shadedTextColor"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

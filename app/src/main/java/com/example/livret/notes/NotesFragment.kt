@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.TextView
 import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -88,6 +89,11 @@ class NotesFragment : Fragment() {
                     position: Int,
                     id: Long
                 ) {
+                    (parent?.getChildAt(0) as TextView?)
+                        ?.setTextColor(
+                            getResources()
+                                .getColor(R.color.secondaryTextColor)
+                        )
                     notesViewModel.setCategoryFilter(
                         binding.categoryFilter.getSelectedItem().toString()
                     )
