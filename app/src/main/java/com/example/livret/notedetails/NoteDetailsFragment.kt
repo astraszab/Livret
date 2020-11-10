@@ -79,13 +79,17 @@ class NoteDetailsFragment : Fragment() {
     private fun updateNote() {
         val note = binding.noteDetailsViewModel?.getNote()
         if (note != null) {
+            note.title = binding.editNoteTitle.text.toString()
+            note.content = binding.editNoteTextContent.text.toString()
+            if (note.title.isEmpty() and note.content.isEmpty()) {
+                binding.noteDetailsViewModel?.onDeleteNote()
+                return
+            }
             if (binding.editTextAddCategory.isVisible) {
                 note.category = binding.editTextAddCategory.text.toString()
             } else {
                 note.category = binding.categorySpinner.getSelectedItem().toString()
             }
-            note.title = binding.editNoteTitle.text.toString()
-            note.content = binding.editNoteTextContent.text.toString()
             binding.noteDetailsViewModel?.onUpdateNote(note)
         }
     }

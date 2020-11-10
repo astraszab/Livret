@@ -108,8 +108,8 @@ class NotesFragment : Fragment() {
         val document = Firebase.firestore.collection("notes").document()
         val note = Note(
             document.id, user?.uid,
-            "default title",
-            "default content",
+            "",
+            "",
             "Home"
         )
 
