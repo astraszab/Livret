@@ -1,11 +1,15 @@
 package com.example.livret
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
+import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.MutableLiveData
 import com.example.livret.databinding.ActivityMainBinding
@@ -18,8 +22,26 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     val userId = MutableLiveData<String?>()
 
+    var themeMode = 0
+
+    val APP_PREFERENCES = "mysettings"
+    val APP_PREFERENCES_THEMEMODE = "ThemeMode"
+    lateinit var mSettings : SharedPreferences
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        mSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE)
+        if (mSettings.contains(APP_PREFERENCES_THEMEMODE)) {
+            themeMode = mSettings.getInt(APP_PREFERENCES_THEMEMODE, AppCompatDelegate.MODE_NIGHT_NO)
+        } else {
+            val editor = mSettings.edit()
+            themeMode = AppCompatDelegate.MODE_NIGHT_NO
+            editor.putInt(APP_PREFERENCES_THEMEMODE, themeMode)
+            editor.apply()
+        }
+        AppCompatDelegate.setDefaultNightMode(themeMode)
+        getSupportActionBar()?.setBackgroundDrawable(ColorDrawable(getResources()
+            .getColor(R.color.primaryColor)))
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
     }
 
@@ -45,8 +67,22 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.sign_out_item) {
             signOut()
+        } else if (item.itemId == R.id.change_theme_item) {
+            swapTheme()
         }
         return true
+    }
+
+    fun swapTheme() {
+        if (themeMode == AppCompatDelegate.MODE_NIGHT_YES) {
+            themeMode = AppCompatDelegate.MODE_NIGHT_NO
+        } else {
+            themeMode = AppCompatDelegate.MODE_NIGHT_YES
+        }
+        val editor = mSettings.edit()
+        editor.putInt(APP_PREFERENCES_THEMEMODE, themeMode)
+        editor.apply()
+        AppCompatDelegate.setDefaultNightMode(themeMode)
     }
 
     fun createSignInIntent() {

@@ -11,4 +11,5 @@
     <string name="searchPrompt">Search</string>
     <string name="your_category_hint">Your category</string>
     <string name="category_label">Category:</string>
+    <string name="change_theme_text">Change Theme</string>
 </resources>
